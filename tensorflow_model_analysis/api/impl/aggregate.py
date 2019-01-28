@@ -49,6 +49,7 @@ def ComputePerSliceMetrics(  # pylint: disable=invalid-name
     slice_result,
     eval_shared_model,
     desired_batch_size = None,
+    fanout = 16,
 ):
   """PTransform for computing, aggregating and combining metrics."""
   return (
@@ -58,7 +59,7 @@ def ComputePerSliceMetrics(  # pylint: disable=invalid-name
               eval_shared_model=eval_shared_model,
               desired_batch_size=desired_batch_size))
       # Explicitly specify a fanout to alleviate memory issues.
-      .with_hot_key_fanout(fanout=16)
+      .with_hot_key_fanout(fanout=fanout)
       | 'InterpretOutput' >> beam.ParDo(
           _ExtractOutputDoFn(eval_shared_model=eval_shared_model)).with_outputs(
               _ExtractOutputDoFn.OUTPUT_TAG_PLOTS,

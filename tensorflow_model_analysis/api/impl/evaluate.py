@@ -67,6 +67,7 @@ def Evaluate(  # pylint: disable=invalid-name
     examples_and_extracts,
     eval_shared_model,
     desired_batch_size = None,
+    fanout = 16,
 ):
   """Evaluate the given EvalSavedModel on the given examples.
 
@@ -104,7 +105,8 @@ def Evaluate(  # pylint: disable=invalid-name
       # plots if applicable.
       | 'ComputePerSliceMetrics' >> aggregate.ComputePerSliceMetrics(
           eval_shared_model=eval_shared_model,
-          desired_batch_size=desired_batch_size))
+          desired_batch_size=desired_batch_size,
+          fanout=fanout))
   # pylint: enable=no-value-for-parameter
 
 

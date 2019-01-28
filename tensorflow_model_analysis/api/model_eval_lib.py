@@ -205,6 +205,7 @@ def ExtractEvaluateAndWriteResults(  # pylint: disable=invalid-name
     slice_spec = None,
     desired_batch_size = None,
     extractors = None,
+    fanout = 16,
 ):
   """Public API version of evaluate.Evaluate that handles example weights.
 
@@ -274,7 +275,8 @@ def ExtractEvaluateAndWriteResults(  # pylint: disable=invalid-name
       | 'Extract' >> evaluate.Extract(extractors=extractors)
       | 'Evaluate' >> evaluate.Evaluate(
           eval_shared_model=eval_shared_model,
-          desired_batch_size=desired_batch_size))
+          desired_batch_size=desired_batch_size,
+          fanout=fanout))
 
   data_location = '<user provided PCollection>'
   if display_only_data_location is not None:
